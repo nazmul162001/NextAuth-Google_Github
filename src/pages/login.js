@@ -1,9 +1,22 @@
-import { Button } from 'antd'
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import auth from '../firebase/firebase.auth.js'
 import { GoogleOutlined, GithubOutlined } from '@ant-design/icons'
 import Head from 'next/head'
 import styles from '@/styles/Login.module.css'
 import { signIn } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+
 const LoginPage = () => {
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth)
+
+    console.log(user)
+
+  const { register, handleSubmit } = useForm()
+  const onSubmit = (data) => {
+    createUserWithEmailAndPassword(data.email, data.password)
+  }
+
   return (
     <div>
       <Head>
@@ -28,12 +41,15 @@ const LoginPage = () => {
           />
         </div>
         <hr />
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor=''>Your Email</label>
-          <input type='email' />
+          <input {...register('email', { required: true })} type='email' />
           <label htmlFor=''>Your Password</label>
-          <input type='password' />
-          <Button>Login</Button>
+          <input
+            {...register('password', { required: true })}
+            type='password'
+          />
+          <button type='submit'>Login</button>
         </form>
       </div>
     </div>

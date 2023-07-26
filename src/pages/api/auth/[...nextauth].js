@@ -13,6 +13,10 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
+  // for privet route 
+  pages: {
+    signIn: "/login"
+  }
 }
 
 export default NextAuth(authOptions)
